@@ -2,9 +2,11 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'InCode'
-  ClientHeight = 434
-  ClientWidth = 625
+  ClientHeight = 408
+  ClientWidth = 744
   Color = clBtnFace
+  Constraints.MinHeight = 467
+  Constraints.MinWidth = 760
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -12,150 +14,47 @@ object Form1: TForm1
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 201
-    Width = 625
+    Top = -5
+    Width = 699
     Height = 4
-    Cursor = crVSplit
-    Align = alTop
+    Align = alNone
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 415
-    Width = 625
+    Top = 389
+    Width = 744
     Height = 19
     Panels = <>
     ExplicitLeft = 336
     ExplicitTop = 280
     ExplicitWidth = 0
   end
-  object Panel1: TPanel
-    Left = 0
-    Top = 0
-    Width = 625
-    Height = 201
-    Align = alTop
-    TabOrder = 1
-    ExplicitTop = -1
-    object Label1: TLabel
-      Left = 15
-      Top = 19
-      Width = 46
-      Height = 13
-      Caption = 'Programa'
-    end
-    object Label2: TLabel
-      Left = 15
-      Top = 59
-      Width = 51
-      Height = 13
-      Caption = 'Sustantivo'
-    end
-    object Label3: TLabel
-      Left = 343
-      Top = 59
-      Width = 28
-      Height = 13
-      Caption = 'Verbo'
-    end
-    object Label4: TLabel
-      Left = 13
-      Top = 94
-      Width = 48
-      Height = 13
-      Caption = 'Resultado'
-    end
-    object Label5: TLabel
-      Left = 13
-      Top = 129
-      Width = 40
-      Height = 13
-      Caption = 'Memoria'
-    end
-    object edPrograma: TEdit
-      Left = 67
-      Top = 16
-      Width = 478
-      Height = 21
-      Color = clInactiveCaption
-      ReadOnly = True
-      TabOrder = 0
-      Text = 'edPrograma'
-    end
-    object edSustantivo: TEdit
-      Left = 67
-      Top = 56
-      Width = 102
-      Height = 21
-      TabOrder = 1
-      Text = 'Edit1'
-    end
-    object edVerbo: TEdit
-      Left = 377
-      Top = 56
-      Width = 102
-      Height = 21
-      TabOrder = 2
-      Text = 'Edit1'
-    end
-    object edResultado: TEdit
-      Left = 67
-      Top = 91
-      Width = 478
-      Height = 21
-      Color = clInactiveCaption
-      ReadOnly = True
-      TabOrder = 3
-      Text = 'Edit1'
-    end
-    object edMemoria: TEdit
-      Left = 67
-      Top = 130
-      Width = 478
-      Height = 21
-      Color = clInactiveCaption
-      ReadOnly = True
-      TabOrder = 4
-      Text = 'Edit1'
-    end
-    object Button1: TButton
-      Left = 67
-      Top = 157
-      Width = 75
-      Height = 25
-      Caption = 'Calculo1'
-      TabOrder = 5
-    end
-    object btSelectFile: TButton
-      Left = 551
-      Top = 14
-      Width = 66
-      Height = 25
-      Caption = 'Seleccionar'
-      TabOrder = 6
-    end
-  end
   object Panel2: TPanel
     Left = 0
-    Top = 205
-    Width = 625
-    Height = 210
+    Top = 0
+    Width = 744
+    Height = 314
     Align = alClient
-    TabOrder = 2
-    ExplicitLeft = 224
-    ExplicitTop = 288
-    ExplicitWidth = 185
-    ExplicitHeight = 41
+    TabOrder = 1
+    ExplicitTop = 5
+    ExplicitWidth = 699
+    ExplicitHeight = 329
     object ListView1: TListView
       Left = 1
       Top = 1
-      Width = 623
-      Height = 208
+      Width = 742
+      Height = 312
       Align = alClient
       Columns = <
+        item
+          Caption = 'Estado'
+          Width = 150
+        end
         item
           Caption = 'Programa'
           Width = 150
@@ -178,16 +77,70 @@ object Form1: TForm1
         end>
       TabOrder = 0
       ViewStyle = vsReport
+      ExplicitWidth = 750
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 314
+    Width = 744
+    Height = 75
+    Align = alBottom
+    TabOrder = 2
+    ExplicitTop = 354
+    ExplicitWidth = 699
+    object Button1: TButton
+      Left = 24
+      Top = 24
+      Width = 75
+      Height = 25
+      Caption = 'Button1'
+      TabOrder = 0
+    end
+    object Button2: TButton
+      Left = 536
+      Top = 24
+      Width = 75
+      Height = 25
+      Caption = 'Button2'
+      TabOrder = 1
     end
   end
   object MainMenu1: TMainMenu
-    Left = 544
-    Top = 349
+    Left = 40
+    Top = 37
     object NuevoPrograma1: TMenuItem
       Caption = 'Inicio'
       object NuevoPrograma2: TMenuItem
         Caption = 'Nuevo Programa'
+        OnClick = NuevoPrograma2Click
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object Cargardefault1: TMenuItem
+        Caption = 'Cargar default'
+        OnClick = Cargardefault1Click
+      end
+      object N2: TMenuItem
+        Caption = '-'
+      end
+      object Salir1: TMenuItem
+        Caption = 'Salir'
+        OnClick = Salir1Click
       end
     end
+  end
+  object FileOpenDialog1: TFileOpenDialog
+    FavoriteLinks = <>
+    FileTypes = <
+      item
+        DisplayName = 'texto'
+        FileMask = '*.txt'
+      end>
+    Options = []
+    Title = 'Cargar Programa'
+    Left = 208
+    Top = 80
   end
 end
