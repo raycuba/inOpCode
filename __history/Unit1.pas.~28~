@@ -1,0 +1,129 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.StdCtrls,
+  Vcl.Menus;
+
+type
+  TForm1 = class(TForm)
+    StatusBar1: TStatusBar;
+    Splitter1: TSplitter;
+    Panel2: TPanel;
+    lvProgramaList: TListView;
+    MainMenu1: TMainMenu;
+    NuevoPrograma1: TMenuItem;
+    NuevoPrograma2: TMenuItem;
+    Panel1: TPanel;
+    Button1: TButton;
+    Button2: TButton;
+    FileOpenDialog1: TFileOpenDialog;
+    N1: TMenuItem;
+    Salir1: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    Editar1: TMenuItem;
+    N2: TMenuItem;
+    Eliminar1: TMenuItem;
+    procedure NuevoPrograma2Click(Sender: TObject);
+    procedure Salir1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Editar1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure CargarPrograma(filename: string);
+    procedure addPrograma(programa, memoria:string; sustantivo, verbo, resultado: integer);
+    procedure editPrograma(item: TListItem);
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+uses unit2, UInCode;
+
+procedure TForm1.addPrograma(programa, memoria: string; sustantivo, verbo,
+  resultado: integer);
+var
+  nodePrograma:TInCodeNode;
+  item: TListItem;
+begin
+  try
+    nodePrograma:=TInCodeNode.create(programa, memoria, sustantivo, verbo, resultado);
+    item:=lvProgramaList.Items.Add;
+    item.Data:=nodePrograma;
+    item.Caption:='Stop';
+    item.SubItems.Add(programa);
+    item.SubItems.Add(inttostr(sustantivo));
+    item.SubItems.Add(inttostr(verbo));
+    item.SubItems.Add(inttostr(resultado));
+    item.SubItems.Add(memoria);
+  finally
+
+  end;
+end;
+
+procedure TForm1.CargarPrograma(filename: string);
+var programa, memoria:string;
+    sustantivo, verbo, resultado:integer;
+begin
+  if FPrograma.NuevoPrograma(filename, programa, memoria, sustantivo, verbo, resultado) then
+  begin
+    addPrograma(programa, memoria, sustantivo, verbo, resultado);
+  end;
+end;
+
+procedure TForm1.Editar1Click(Sender: TObject);
+begin
+  editPrograma(lvProgramaList.Selected);
+end;
+
+procedure TForm1.editPrograma(item: TListItem);
+var
+  programa, memoria: string;
+  sustantivo, verbo, resultado: integer;
+  nodePrograma:TInCodeNode;
+begin
+  if item<>nil then
+  begin
+    nodePrograma:=TInCodeNode(item.Data);
+    if FPrograma.EditPrograma(nodePrograma.programa, nodePrograma.memoria, nodePrograma.sustantivo, nodePrograma.verbo, nodePrograma.resultado) then
+    begin
+      item.SubItems[1]:= inttostr(sustantivo);
+      item.SubItems[2]:= inttostr(verbo);
+      item.SubItems[3]:= inttostr(resultado);
+      item.SubItems[4]:= memoria;
+    end;
+  end;
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+  CargarPrograma('D:\DEVELOP\inOpCode\Input.txt');
+end;
+
+procedure TForm1.NuevoPrograma2Click(Sender: TObject);
+begin
+  if FileOpenDialog1.Execute then
+    begin
+      if FileExists(FileOpenDialog1.FileName) then
+        { If it exists, load the data into the memo box. }
+         CargarPrograma(FileOpenDialog1.FileName)
+      else
+        { Otherwise, raise an exception. }
+        raise Exception.Create('Archivo no existe.');
+    end;
+end;
+
+procedure TForm1.Salir1Click(Sender: TObject);
+begin
+  application.Terminate;
+end;
+
+end.

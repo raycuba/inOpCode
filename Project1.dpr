@@ -4,7 +4,8 @@ uses
   Vcl.Forms,
   Unit1 in 'Unit1.pas' {Form1},
   UInCode in 'UInCode.pas',
-  Unit2 in 'Unit2.pas' {FPrograma};
+  Unit2 in 'Unit2.pas' {FPrograma},
+  StrTools in 'StrTools.pas';
 
 {$R *.res}
 

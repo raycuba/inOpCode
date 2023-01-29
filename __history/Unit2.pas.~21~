@@ -1,0 +1,126 @@
+unit Unit2;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Samples.Spin;
+
+type
+  TFPrograma = class(TForm)
+    Label1: TLabel;
+    edPrograma: TEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    edMemoria: TEdit;
+    Button1: TButton;
+    spSustantivo: TSpinEdit;
+    spVerbo: TSpinEdit;
+    spResultado: TSpinEdit;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function NuevoPrograma(filename: string; var programa, memoria:string; var sustantivo, verbo, resultado: integer):Boolean;
+    function EditPrograma(var programa, memoria:string; var sustantivo, verbo, resultado: integer):Boolean;
+  end;
+
+var
+  FPrograma: TFPrograma;
+
+implementation
+
+{$R *.dfm}
+
+{ TFPrograma }
+
+procedure TFPrograma.Button1Click(Sender: TObject);
+begin
+  ModalResult:=mrOk;
+end;
+
+function TFPrograma.EditPrograma(var programa, memoria: string; var sustantivo,
+  verbo, resultado: integer): Boolean;
+var ok:Boolean;
+begin
+  self.Caption:='Editar Programa';
+  ok:=false;
+
+  try
+
+    edPrograma.Text:= programa;
+    edMemoria.Text:=memoria;
+    spSustantivo.Value:=sustantivo;
+    spVerbo.Value:=verbo;
+    spResultado.Value:=resultado;
+
+    if self.ShowModal=mrOk then
+      begin
+        sustantivo:=spSustantivo.Value;
+        verbo:=spVerbo.Value;
+        resultado:=spResultado.Value;
+
+        ok:=True;
+      end;
+
+  except
+    MessageDLG('Error Cargando archivo', mtError, [mbOK],0);
+  end;
+
+  result:= ok;
+
+end;
+
+function TFPrograma.NuevoPrograma(filename: string; var programa, memoria:string; var sustantivo, verbo, resultado: integer):Boolean;
+var L:TStrings; ok:Boolean;
+begin
+  self.Caption:='Nuevo Programa';
+  ok:=false;
+  try
+
+    try
+      L:=TStringList.Create;
+      L.LoadFromFile(filename);
+      if L.Count>0 then
+        begin
+          edPrograma.Text:= filename;
+          edMemoria.Text:=L.Strings[0];
+          spSustantivo.Value:=0;
+          spVerbo.Value:=0;
+          spResultado.Value:=0;
+
+          if self.ShowModal=mrOk then
+            begin
+              self.ShowModal;
+
+              programa:=edPrograma.Text;
+              memoria:=edMemoria.Text;
+              sustantivo:=spSustantivo.Value;
+              verbo:=spVerbo.Value;
+              resultado:=spResultado.Value;
+
+              ok:=True;
+            end;
+        end
+      else
+        begin
+          MessageDLG('Archivo vacio', mtError, [mbOK],0);
+        end;
+
+    except
+      MessageDLG('Error Cargando archivo', mtError, [mbOK],0);
+    end;
+
+  finally
+     L.Free;
+  end;
+
+  result:= ok;
+
+end;
+
+
+end.

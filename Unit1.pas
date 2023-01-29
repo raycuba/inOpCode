@@ -12,27 +12,34 @@ type
     StatusBar1: TStatusBar;
     Splitter1: TSplitter;
     Panel2: TPanel;
-    ListView1: TListView;
+    lvProgramaList: TListView;
     MainMenu1: TMainMenu;
     NuevoPrograma1: TMenuItem;
     NuevoPrograma2: TMenuItem;
-    Panel1: TPanel;
-    Button1: TButton;
-    Button2: TButton;
     FileOpenDialog1: TFileOpenDialog;
-    Cargardefault1: TMenuItem;
     N1: TMenuItem;
-    N2: TMenuItem;
     Salir1: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    Editar1: TMenuItem;
+    N2: TMenuItem;
+    Eliminar1: TMenuItem;
+    N3: TMenuItem;
+    Calculo11: TMenuItem;
     procedure NuevoPrograma2Click(Sender: TObject);
-    procedure Cargardefault1Click(Sender: TObject);
     procedure Salir1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure Editar1Click(Sender: TObject);
+    procedure Eliminar1Click(Sender: TObject);
+    procedure Calculo11Click(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
     procedure CargarPrograma(filename: string);
+    procedure addPrograma(programa, memoria:string; sustantivo, verbo, resultado: integer);
+    procedure editPrograma(item: TListItem);
+    procedure eliminarPrograma(item: TListItem);
+    procedure calculo1Programa(item: TListItem);
   end;
 
 var
@@ -42,16 +49,97 @@ implementation
 
 {$R *.dfm}
 
-uses unit2;
+uses unit2, UInCode;
 
-procedure TForm1.Cargardefault1Click(Sender: TObject);
+procedure TForm1.addPrograma(programa, memoria: string; sustantivo, verbo,
+  resultado: integer);
+var
+  nodePrograma:TInCodeNode;
+  item: TListItem;
 begin
-  CargarPrograma('D:\DEVELOP\inOpCode\Input.txt');
+  try
+    nodePrograma:=TInCodeNode.create(programa, memoria, sustantivo, verbo, resultado);
+    item:=lvProgramaList.Items.Add;
+    item.Data:=nodePrograma;
+    item.Caption:='Stop';
+    item.SubItems.Add(programa);
+    item.SubItems.Add(inttostr(sustantivo));
+    item.SubItems.Add(inttostr(verbo));
+    item.SubItems.Add(inttostr(resultado));
+    item.SubItems.Add(memoria);
+  finally
+
+  end;
+end;
+
+procedure TForm1.Calculo11Click(Sender: TObject);
+begin
+  calculo1Programa(lvProgramaList.Selected);
+end;
+
+procedure TForm1.calculo1Programa(item: TListItem);
+var
+  nodePrograma:TInCodeNode;
+begin
+  if item<>nil then
+    begin
+      nodePrograma:=TInCodeNode(item.Data);
+      nodePrograma.RunCode1;
+    end;
 end;
 
 procedure TForm1.CargarPrograma(filename: string);
+var programa, memoria:string;
+    sustantivo, verbo, resultado:integer;
 begin
-  FPrograma.NuevoPrograma(filename);
+  if FPrograma.NuevoPrograma(filename, programa, memoria, sustantivo, verbo, resultado) then
+  begin
+    addPrograma(programa, memoria, sustantivo, verbo, resultado);
+  end;
+end;
+
+procedure TForm1.Editar1Click(Sender: TObject);
+begin
+  editPrograma(lvProgramaList.Selected);
+end;
+
+procedure TForm1.editPrograma(item: TListItem);
+var
+  programa, memoria: string;
+  sustantivo, verbo, resultado: integer;
+  nodePrograma:TInCodeNode;
+begin
+  if item<>nil then
+  begin
+    nodePrograma:=TInCodeNode(item.Data);
+    if FPrograma.EditPrograma(nodePrograma.programa, nodePrograma.memoria, nodePrograma.sustantivo, nodePrograma.verbo, nodePrograma.resultado) then
+    begin
+      item.SubItems[1]:= inttostr(nodePrograma.sustantivo);
+      item.SubItems[2]:= inttostr(nodePrograma.verbo);
+      item.SubItems[3]:= inttostr(nodePrograma.resultado);
+      item.SubItems[4]:= nodePrograma.memoria;
+    end;
+  end;
+end;
+
+procedure TForm1.Eliminar1Click(Sender: TObject);
+begin
+  eliminarPrograma(lvProgramaList.Selected);
+end;
+
+procedure TForm1.eliminarPrograma(item: TListItem);
+var
+  nodePrograma:TInCodeNode;
+begin
+  if item<>nil then
+  begin
+    if MessageDlg('Está seguro de eliminar?', mtWarning, [mbYes, mbNo],0)=mrYes then
+      begin
+        nodePrograma:=TInCodeNode(item.Data);
+        nodePrograma.Free;
+        lvProgramaList.Items.Delete(item.Index);
+      end;
+  end;
 end;
 
 procedure TForm1.FormShow(Sender: TObject);

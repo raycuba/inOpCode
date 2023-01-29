@@ -78,6 +78,7 @@ object FPrograma: TFPrograma
     Height = 25
     Caption = 'Guardar'
     TabOrder = 2
+    OnClick = Button1Click
   end
   object spSustantivo: TSpinEdit
     Left = 72

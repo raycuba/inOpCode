@@ -19,11 +19,12 @@ type
     spSustantivo: TSpinEdit;
     spVerbo: TSpinEdit;
     spResultado: TSpinEdit;
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
-    function NuevoPrograma(filename: string):Boolean;
+    function NuevoPrograma(filename: string; var programa, memoria:string; var sustantivo, verbo, resultado: integer):Boolean;
     function EditPrograma(var programa, memoria:string; var sustantivo, verbo, resultado: integer):Boolean;
   end;
 
@@ -35,6 +36,11 @@ implementation
 {$R *.dfm}
 
 { TFPrograma }
+
+procedure TFPrograma.Button1Click(Sender: TObject);
+begin
+  ModalResult:=mrOk;
+end;
 
 function TFPrograma.EditPrograma(var programa, memoria: string; var sustantivo,
   verbo, resultado: integer): Boolean;
@@ -51,13 +57,14 @@ begin
     spVerbo.Value:=verbo;
     spResultado.Value:=resultado;
 
-    self.ShowModal;
+    if self.ShowModal=mrOk then
+      begin
+        sustantivo:=spSustantivo.Value;
+        verbo:=spVerbo.Value;
+        resultado:=spResultado.Value;
 
-    sustantivo:=spSustantivo.Value;
-    verbo:=spVerbo.Value;
-    resultado:=spResultado.Value;
-
-    ok:=True;
+        ok:=True;
+      end;
 
   except
     MessageDLG('Error Cargando archivo', mtError, [mbOK],0);
@@ -67,7 +74,7 @@ begin
 
 end;
 
-function TFPrograma.NuevoPrograma(filename: string):Boolean;
+function TFPrograma.NuevoPrograma(filename: string; var programa, memoria:string; var sustantivo, verbo, resultado: integer):Boolean;
 var L:TStrings; ok:Boolean;
 begin
   self.Caption:='Nuevo Programa';
@@ -85,9 +92,17 @@ begin
           spVerbo.Value:=0;
           spResultado.Value:=0;
 
-          self.ShowModal;
+          if self.ShowModal=mrOk then
+            begin
 
-          ok:=True;
+              programa:=edPrograma.Text;
+              memoria:=edMemoria.Text;
+              sustantivo:=spSustantivo.Value;
+              verbo:=spVerbo.Value;
+              resultado:=spResultado.Value;
+
+              ok:=True;
+            end;
         end
       else
         begin

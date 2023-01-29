@@ -1,0 +1,94 @@
+unit UInCode;
+
+interface
+
+uses System.Classes, SysUtils, Vcl.Forms, Vcl.ComCtrls, Winapi.Messages;
+
+type
+
+TInCodeNode = class(TObject)
+private
+  CodeList:Array of integer;
+  procedure FlushCodeList;
+  procedure memoriaToCodeList;
+public
+  estado, programa, memoria:String;
+  verbo, sustantivo, resultado:integer;
+  constructor Create(pprograma, pmemoria:string; psustantivo, pverbo, presultado: integer);
+  destructor Destroy;
+  procedure RunCode1;
+end;
+
+TInCodeNodeList = class(TObject)
+public
+  NodeList:TList;
+  constructor Create;
+  destructor Destroy;
+published
+
+end;
+
+
+implementation
+
+uses StrTools;
+
+{ TInCodeNode }
+
+constructor TInCodeNode.Create(pprograma, pmemoria:string; psustantivo, pverbo, presultado: integer);
+begin
+  self.programa:=pprograma;
+  self.memoria:=pmemoria;
+  self.verbo:=pverbo;
+  self.sustantivo:=psustantivo;
+  self.resultado:=presultado;
+end;
+
+destructor TInCodeNode.Destroy;
+begin
+
+end;
+
+procedure TInCodeNode.FlushCodeList;
+begin
+  SetLength(CodeList, 0);
+end;
+
+procedure TInCodeNode.memoriaToCodeList;
+var
+  slots: array of string;
+  i:integer;
+begin
+  //limpiar todos los espacios en blanco
+  memoria:=trim(memoria);
+  while pos(#32, memoria)>-1 do delete(memoria, pos(#32, memoria), 1);
+
+  FlushCodeList;
+
+  //Split string into array.
+  slots := StringSplit(memoria, ',');
+
+  for i := 0 to slots. do
+
+end;
+
+procedure TInCodeNode.RunCode1;
+begin
+  memoriaToCodeList;
+  //CodeList.SaveToFile('d:\codelist.txt');
+end;
+
+{ TInCodeNodeList }
+
+constructor TInCodeNodeList.Create;
+begin
+
+end;
+
+destructor TInCodeNodeList.Destroy;
+begin
+
+end;
+
+
+end.

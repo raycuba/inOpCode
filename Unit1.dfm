@@ -30,25 +30,20 @@ object Form1: TForm1
     Width = 744
     Height = 19
     Panels = <>
-    ExplicitLeft = 336
-    ExplicitTop = 280
-    ExplicitWidth = 0
   end
   object Panel2: TPanel
     Left = 0
     Top = 0
     Width = 744
-    Height = 314
+    Height = 389
     Align = alClient
     TabOrder = 1
-    ExplicitTop = 5
-    ExplicitWidth = 699
-    ExplicitHeight = 329
-    object ListView1: TListView
+    ExplicitHeight = 314
+    object lvProgramaList: TListView
       Left = 1
       Top = 1
       Width = 742
-      Height = 312
+      Height = 387
       Align = alClient
       Columns = <
         item
@@ -75,35 +70,13 @@ object Form1: TForm1
           Caption = 'Memoria'
           Width = 500
         end>
+      ReadOnly = True
+      RowSelect = True
+      PopupMenu = PopupMenu1
       TabOrder = 0
       ViewStyle = vsReport
-      ExplicitWidth = 750
-    end
-  end
-  object Panel1: TPanel
-    Left = 0
-    Top = 314
-    Width = 744
-    Height = 75
-    Align = alBottom
-    TabOrder = 2
-    ExplicitTop = 354
-    ExplicitWidth = 699
-    object Button1: TButton
-      Left = 24
-      Top = 24
-      Width = 75
-      Height = 25
-      Caption = 'Button1'
-      TabOrder = 0
-    end
-    object Button2: TButton
-      Left = 536
-      Top = 24
-      Width = 75
-      Height = 25
-      Caption = 'Button2'
-      TabOrder = 1
+      ExplicitLeft = 2
+      ExplicitTop = 5
     end
   end
   object MainMenu1: TMainMenu
@@ -116,13 +89,6 @@ object Form1: TForm1
         OnClick = NuevoPrograma2Click
       end
       object N1: TMenuItem
-        Caption = '-'
-      end
-      object Cargardefault1: TMenuItem
-        Caption = 'Cargar default'
-        OnClick = Cargardefault1Click
-      end
-      object N2: TMenuItem
         Caption = '-'
       end
       object Salir1: TMenuItem
@@ -142,5 +108,27 @@ object Form1: TForm1
     Title = 'Cargar Programa'
     Left = 208
     Top = 80
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 472
+    Top = 112
+    object Editar1: TMenuItem
+      Caption = 'Editar'
+      OnClick = Editar1Click
+    end
+    object N2: TMenuItem
+      Caption = '-'
+    end
+    object Calculo11: TMenuItem
+      Caption = 'Calculo 1'
+      OnClick = Calculo11Click
+    end
+    object N3: TMenuItem
+      Caption = '-'
+    end
+    object Eliminar1: TMenuItem
+      Caption = 'Eliminar'
+      OnClick = Eliminar1Click
+    end
   end
 end

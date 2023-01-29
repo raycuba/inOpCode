@@ -2,15 +2,22 @@ unit UInCode;
 
 interface
 
-uses System.Classes, SysUtils, Vcl.Forms, Vcl.ComCtrls;
+uses System.Classes, SysUtils, Vcl.Forms, Vcl.ComCtrls, Winapi.Messages;
 
 type
 
-TInCodeNode = class
+TInCodeNode = class(TObject)
+private
+  CodeList:Array of integer;
+  procedure FlushCodeList;
+  procedure MemoriaToCodeList;
+  procedure CodeListToMemoria;
 public
-  programa, sustantivo, verbo, resultado, memoria:String;
-  constructor Create(PathFileNameExt:String);
+  estado, programa, memoria:String;
+  verbo, sustantivo, resultado:integer;
+  constructor Create(pprograma, pmemoria:string; psustantivo, pverbo, presultado: integer);
   destructor Destroy;
+  procedure RunCode1;
 end;
 
 TInCodeNodeList = class(TObject)
@@ -25,6 +32,75 @@ end;
 
 implementation
 
+uses StrTools;
+
+{ TInCodeNode }
+
+constructor TInCodeNode.Create(pprograma, pmemoria:string; psustantivo, pverbo, presultado: integer);
+begin
+  self.programa:=pprograma;
+  self.memoria:=pmemoria;
+  self.verbo:=pverbo;
+  self.sustantivo:=psustantivo;
+  self.resultado:=presultado;
+end;
+
+destructor TInCodeNode.Destroy;
+begin
+
+end;
+
+procedure TInCodeNode.FlushCodeList;
+begin
+  SetLength(CodeList, 0);
+end;
+
+procedure TInCodeNode.MemoriaToCodeList;
+var
+  slots: TParts;
+  i:integer;
+begin
+  //limpiar todos los espacios en blanco
+  memoria:=trim(memoria);
+
+  //while (length(memoria)>0) and (pos(' ', memoria)>-1) do
+  //begin
+    //delete(memoria, pos(#32, memoria), 1);
+  //end;
+
+  FlushCodeList;
+
+  //Split string into array.
+  slots := StringSplit(memoria, ',');
+
+  //Display all items.
+  SetLength(CodeList, Length(slots));
+    for i := 0 to Length(slots) - 1 do
+    begin
+      CodeList[i]:=strtoint(slots[i]);
+    end;
+end;
+
+procedure TInCodeNode.CodeListToMemoria;
+var i:integer;
+begin
+  memoria:='';
+  for i := 0 to Length(CodeList)-1 do
+  begin
+    if memoria = '' then
+      memoria:=inttostr(CodeList[i])
+    else
+      memoria:=memoria+','+inttostr(CodeList[i]);
+  end;
+end;
+
+procedure TInCodeNode.RunCode1;
+begin
+  MemoriaToCodeList;
+  CodeListToMemoria;
+  //CodeList.SaveToFile('d:\codelist.txt');
+end;
+
 { TInCodeNodeList }
 
 constructor TInCodeNodeList.Create;
@@ -37,16 +113,5 @@ begin
 
 end;
 
-{ TInCodeNode }
-
-constructor TInCodeNode.Create(PathFileNameExt: String);
-begin
-
-end;
-
-destructor TInCodeNode.Destroy;
-begin
-
-end;
 
 end.
